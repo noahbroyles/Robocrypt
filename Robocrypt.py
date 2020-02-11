@@ -103,8 +103,6 @@ try:
         if not os.path.exists(filename):
             print(filename, "was not found.")
             sys.exit()
-        if filename.endswith("/"):
-            filename = filename[:-1]
         if os.path.isdir(filename): # This is a folder we need to
             mode = input('Would you like to encrypt this folder? ').lower()
             if mode[0] in ["y", 'e']:
