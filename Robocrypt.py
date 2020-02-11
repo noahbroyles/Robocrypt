@@ -103,9 +103,9 @@ try:
         if not os.path.exists(filename):
             print(filename, "was not found.")
             sys.exit()
+        if filename.endswith("/"):
+            filename = filename[:-1]
         if os.path.isdir(filename): # This is a folder we need to
-            if filename.endswith("/"):
-                filename = filename[:-1]
             mode = input('Would you like to encrypt this folder? ').lower()
             if mode[0] in ["y", 'e']:
                 if input("Encrypting this folder will first zip it and then encrpyt the zip. The zip must first be decrypted by this program and then unzipped. Is that okay? ").lower()[0] == "y":
