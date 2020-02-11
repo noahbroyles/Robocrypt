@@ -1,7 +1,7 @@
 try:
     # Caesar Cipher has now become robocrypt and uses super strong Encryption instead of a cipher. Hehe hackers! 
     import posixpath as path
-    import base64, os, getpass, sys, pyperclip, contextlib
+    import base64, os, getpass, sys, pyperclip, contextlib, readline
     from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives import hashes
     from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
