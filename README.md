@@ -4,7 +4,7 @@
 With Robocrypt you can encrpyt/decrypt messages, files, or folders using a password.
 Don't look at the code too hard... It's messy. I modifed an old program to use stronger encryption.
 
-_TO DO_: Clean up and modularize code
+_TO DO_: Clean up and modularize code, possibly add encryption support for drive partions
 
 ### To get started:
 `python3 -m pip install cryptography`
