@@ -51,7 +51,7 @@ try:
         return input()
 
 
-    def encrpyt(message, password):
+    def encrypt(message, password):
         key = base64.urlsafe_b64encode(kdf.derive(password))
         f = Fernet(key)
         return f.encrypt(message)
@@ -122,8 +122,8 @@ try:
         if os.path.isdir(filename):  # This is a folder we need to
             mode = input('Would you like to encrypt this folder? ').lower()
             if mode[0] in ["y", 'e']:
-                if input("Encrypting this folder will first zip it and then encrpyt the zip. The zip must first be decrypted by this program and then unzipped. Is that okay? ").lower()[0] == "y":
-                    print("Enter the password to encrpyt this folder with: ")
+                if input("Encrypting this folder will first zip it and then encrypt the zip. The zip must first be decrypted by this program and then unzipped. Is that okay? ").lower()[0] == "y":
+                    print("Enter the password to encrypt this folder with: ")
                     password = getpass.getpass().encode()
                     os.system("zip -rv " + path + ".zip.roboFolder " + filename)
                     os.system("rm -fr " + filename)
@@ -132,11 +132,11 @@ try:
                     file = open(filename, 'rb')
                     encodedMessage = file.read()
                     file.close()
-                    encryptedMessage = encrpyt(encodedMessage, password)
+                    encryptedMessage = encrypt(encodedMessage, password)
                     file = open(filename, 'wb')
                     file.write(encryptedMessage)
                     file.close()
-                    print('The folder was encrypted succesfully and stored as an encrpyted zipped folder only readable by this program named "' + filename + '"')
+                    print('The folder was encrypted succesfully and stored as an encrypted zipped folder only readable by this program named "' + filename + '"')
                 else:
                     print('Your files weren\'t touched.')
                     sys.exit()
@@ -184,12 +184,12 @@ try:
             if mode[0] in ["e", "y"]:
                 if input("Encrypting this file will make it only readable by this program. Is that okay? ").lower()[0] == "y":
                     print()
-                    print("Enter the password to encrpyt this file with: ")
+                    print("Enter the password to encrypt this file with: ")
                     password = getpass.getpass().encode()
                     file = open(filename, 'rb')
                     encodedMessage = file.read()
                     file.close()
-                    encryptedMessage = encrpyt(encodedMessage, password)
+                    encryptedMessage = encrypt(encodedMessage, password)
                     file = open(filename, 'wb')
                     file.write(encryptedMessage)
                     file.close()
