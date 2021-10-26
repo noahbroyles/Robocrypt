@@ -1,8 +1,10 @@
+#!/usr/bin/python3 
+
 try:
     # Caesar Cipher has now become robocrypt and uses super strong Encryption instead of a cipher. Hehe hackers! 
     import posixpath as path
     import base64, os, getpass, sys, contextlib, readline
-    from src import pyperclip
+    import pyperclip
     from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives import hashes
     from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -77,7 +79,7 @@ try:
             password = getpass.getpass().encode()
             print()
             encodedMessage = message.encode()
-            encryptedMessage = encrpyt(encodedMessage, password)
+            encryptedMessage = encrypt(encodedMessage, password)
             # Give it out
             print('Your translated text is:')
             print()
