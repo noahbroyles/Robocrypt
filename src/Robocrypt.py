@@ -63,7 +63,7 @@ try:
         if mode[0] == "e":
             message = getMessage()
             print()
-            print("Enter the password to encrpyt this with: ")
+            print("Enter the password to encrypt this with: ")
             password = getpass.getpass().encode()
             print()
             encodedMessage = message.encode()
