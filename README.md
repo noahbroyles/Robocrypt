@@ -18,3 +18,6 @@ Run `python3 Robocrypt.py`. Follow the prompts for Encryption / Decryption.
 
 ### To Encrypt / Decrypt a file or folder:
 Run `python3 Robocrypt.py <path/to/thing>`. Follow the prompts.
+
+### Tiny Disclaimer:
+I'm not a cryptography expert and I do not know exactly how secure this encryption algorithm is. I can't break it, but that doesn't mean much. :)  
