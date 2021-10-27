@@ -127,10 +127,10 @@ try:
                 if input("Encrypting this folder will first zip it and then encrypt the zip. The zip must first be decrypted by this program and then unzipped. Is that okay? ").lower()[0] == "y":
                     print("Enter the password to encrypt this folder with: ")
                     password = getpass.getpass().encode()
-                    os.system("zip -rv " + path + ".zip.roboFolder " + filename)
+                    os.system(f"zip -rv {path[:-1] if path.endswith('/') else path}.zip.roboFolder {filename}")
                     os.system("rm -fr " + filename)
                     print()
-                    filename = (path + '.zip.roboFolder')
+                    filename = f"{path[:-1] if path.endswith('/') else path}.zip.roboFolder"
                     file = open(filename, 'rb')
                     encodedMessage = file.read()
                     file.close()
