@@ -7,7 +7,9 @@ Don't look at the code too hard... It's messy. I modifed an old program to use s
 _TO DO_: Clean up and modularize code, possibly add encryption support for drive partions
 
 ### To get started:
-`python3 -m pip install -r requirements.txt`
+```console
+python3 -m pip install -r requirements.txt
+```
 Before you can start encrypting stuff, you first need to generate a salt using `python3 generateSalt.py <salt length>`. Make sure whatever user you run as can access `/var/secure` and *ONLY* that user.
 #### Warning! If you change your salt you will no longer be able to decrypt anything encrypted with the previous salt!!! Be careful!
 
