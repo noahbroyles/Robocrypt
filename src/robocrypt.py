@@ -128,4 +128,7 @@ if __name__ == '__main__':
         if cryption == 'en':  # 'en'cryption baby!
             encrypt_file(file_path, password=pw)
         elif cryption == 'de':  # 'de'cryption baby!
-            decrypt_file(file_path, password=pw)
+            try:
+                decrypt_file(file_path, password=pw)
+            except DecryptionError:
+                sys.exit('Invalid password.')
