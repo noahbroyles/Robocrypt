@@ -3,6 +3,7 @@
 import os
 import sys
 import base64
+import shutil
 import getpass
 
 from pathlib import Path
@@ -61,7 +62,9 @@ def encrypt_file(filepath: str, password: str):
 
     encrypted_content = encrypt(content, password.encode())
 
-    with open(f"{path}/{filename}.{ext}.robo", 'wb') as enc_f:
+    output_path = f"{path}/{filename}.{ext}.robo" if ext != 'robodir' else f"{path}/{filename}.robodir"
+
+    with open(output_path, 'wb') as enc_f:
         enc_f.write(encrypted_content)
 
     os.remove(filepath)
@@ -70,7 +73,7 @@ def encrypt_file(filepath: str, password: str):
 def decrypt_file(filepath: str, password: str):
     chunks = filepath.split('/')
     path = '/'.join(chunks[:-1])
-    filename, ext, _ = chunks[-1].split('.')
+    filename, ext, robo_type = chunks[-1].split('.')
 
     with open(filepath, 'rb') as f:
         encrypted_content = f.read()
@@ -80,10 +83,17 @@ def decrypt_file(filepath: str, password: str):
     except AttributeError:
         raise DecryptionError
 
-    with open(f"{path}/{filename}.{ext}", 'wb') as dcrp_f:
+    output = f"{path}/{filename}.{ext}" if robo_type != 'robodir' else f"{path}/{filename}.{ext}.zip"
+
+    with open(output, 'wb') as dcrp_f:
         dcrp_f.write(decrypted_content)
 
+    if robo_type == 'robodir':
+        # Unzip the zip
+        shutil.unpack_archive(output, path)
+
     os.remove(filepath)
+    os.remove(output)
 
 
 def read_encrypted_file(filepath: str, password: str) -> bytes:
@@ -126,6 +136,10 @@ if __name__ == '__main__':
         file_path = file_obj.absolute().as_posix()
         pw = getpass.getpass(f"Enter password to {cryption}crypt: ")
         if cryption == 'en':  # 'en'cryption baby!
+            # We gotta know if this file is a file or a directory
+            if file_obj.is_dir():
+                shutil.make_archive(f"{file_path}.robodir", 'zip', file_path)
+                os.rmdir(file_path)
             encrypt_file(file_path, password=pw)
         elif cryption == 'de':  # 'de'cryption baby!
             try:
