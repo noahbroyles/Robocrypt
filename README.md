@@ -7,7 +7,7 @@ Robocrypt is amazing for encrypting small files and folders with sensitive data.
 
 ## Docs:
 ```console
-$ ./robocrypt.py -- help
+$ ./robocrypt.py --help
 usage: robocrypt [-h] {encrypt,decrypt} file
 
     ____        __             __ __
