@@ -5,6 +5,18 @@ Due to the encryption algorithm in use here, large files should not be encrypted
 
 Robocrypt is amazing for encrypting small files and folders with sensitive data. I guarantee that ain't nobody gonna break the encryption, unless you use a shitty password.
 
+## Setup:
+Create a `secure` directory with whatever permissions you decide are appropriate:
+```console
+$ sudo mkdir /var/secure
+$ sudo chmod <whatever> /var/secure
+```  
+Generate a salt to use when encrypting stuff:
+```console
+$ ./generateSalt 1247
+```  
+Make sure that you decrypt anything you've encrypted with your current salt before you change it! Otherwise you will never recover files that you encrypted. 
+
 ## Docs:
 ```console
 $ ./robocrypt.py --help
