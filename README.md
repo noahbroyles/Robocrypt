@@ -16,6 +16,7 @@ Generate a salt to use when encrypting stuff:
 $ ./generateSalt 1247
 ```  
 Make sure that you decrypt anything you've encrypted with your current salt(or back it up) before you change it! Otherwise you will never be able to recover files that you encrypted. 
+If you intend to share encrypted files with someone, you also need to share your salt with them or they will have serious trouble trying to decrypt the files.
 
 ## Docs:
 ```console
