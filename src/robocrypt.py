@@ -13,12 +13,22 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 # This is the version of the programme ;)
-__version__ = '4Pro'
+__version__ = '4.2Pro'
 
 
-def get_salt(salt_file='/var/secure/robocrypt.salt'):
+def get_salt(salt_file: str = None):
+    # Support for Linux and Windows
+    if not salt_file:
+        if os.path.exists('/var/secure/robocrypt.salt'):
+            salt_file = '/var/secure/robocrypt.salt'
+        elif os.path.exists('C:/secure/robocrypt.salt'):
+            salt_file = 'C:/secure/robocrypt.salt'
+        else:
+            salt = b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
+
     with open(salt_file, 'rb') as sf:
         salt = sf.read()
+
     return salt
 
 
