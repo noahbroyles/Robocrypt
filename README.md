@@ -1,4 +1,6 @@
 # Robocrypt
-## Super strong (I hope) python3 encryption program with file <s>and folder</s> support
+## Super strong python3 encryption program with file and folder support
 
-Threading does pretty much no good here. Sad. Sometime I might make it better. At the moment, the algo is not the most efficient. I would recommend only encrypting small files with a shift. If you wanna encrypt large files, be prepared to wait.
+Due to the encryption algorithm in use here, large files should be be encrypted with this tool. Robocrypt keeps data in memory while encrypting/decrypting, so depending on the RAM in your system there will be a limit on the size of files you can encrypt with this tool.
+
+Robocrypt is amazing for encrypting small files and folders with sensitive data. I guarantee that ain't nobody gonna break the encryption, unless you use a shitty password.
