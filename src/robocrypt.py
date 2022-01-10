@@ -35,7 +35,8 @@ def get_kdf():
 def encrypt(message: bytes, password: bytes):
     f = Fernet(base64.urlsafe_b64encode(get_kdf().derive(password)))
     encrypted_bytes = f.encrypt(message)
-    return encrypted_bytes
+
+    return base64.urlsafe_b64decode(encrypted_bytes)
 
 
 class DecryptionError(Exception):
@@ -47,7 +48,7 @@ def decrypt(message: bytes, password: bytes):
     f = Fernet(base64.urlsafe_b64encode(get_kdf().derive(password)))
 
     try:
-        return f.decrypt(message)
+        return f.decrypt(base64.urlsafe_b64encode(message))
     except InvalidToken:
         raise DecryptionError
 
