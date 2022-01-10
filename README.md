@@ -23,4 +23,4 @@ positional arguments:
 optional arguments:
   -h, --help         show this help message and exit
 ```
-When using the tool, don't jack around with the output files' extensions (`.robo` and `.robodir`). If you do this, you will regret it. Also I would recommend not to double-encrpyt anything. Because of the way the program works with extensions, you'll end up screwing yourself. Encrypt your shit ***one*** time with a strong password.
+When using the tool, don't jack around with the output files' extensions (`.robo` and `.robodir`). If you do this, you will regret it. Also I would recommend not to double-encrypt anything. Because of the way the program works with extensions, you'll end up screwing yourself. Encrypt your shit ***one*** time with a strong password.
