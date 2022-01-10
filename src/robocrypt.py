@@ -12,7 +12,7 @@ from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-# This is the version of the programn ;)
+# This is the version of the programme ;)
 __version__ = '4Pro'
 
 
@@ -53,27 +53,34 @@ def decrypt(message: bytes, password: bytes):
 
 
 def encrypt_file(filepath: str, password: str):
-    chunks = filepath.split('/')
-    path = '/'.join(chunks[:-1])
-    filename, ext = chunks[-1].split('.')
+    filepath = Path(filepath)
+    parent_dir = filepath.parent
+    filename = filepath.name
 
-    with open(filepath, 'rb') as f:
+    if filepath.is_dir():
+        # This is a directory
+        read_path = shutil.make_archive(f'{filepath}.robotmp', 'zip', filepath.as_posix())
+        shutil.rmtree(filepath.as_posix())
+        output_path = f"{parent_dir}/{filename}.robodir"
+    else:
+        # This is just a file
+        read_path = filepath
+        output_path = f"{parent_dir}/{filename}.robo"
+    
+    with open(read_path, 'rb') as f:
         content = f.read()
 
     encrypted_content = encrypt(content, password.encode())
-
-    output_path = f"{path}/{filename}.{ext}.robo" if ext != 'robodir' else f"{path}/{filename}.robodir"
-
     with open(output_path, 'wb') as enc_f:
         enc_f.write(encrypted_content)
 
-    os.remove(filepath)
+    os.remove(read_path)
 
 
 def decrypt_file(filepath: str, password: str):
-    chunks = filepath.split('/')
-    path = '/'.join(chunks[:-1])
-    filename, ext, robo_type = chunks[-1].split('.')
+    filepath = Path(filepath)
+    parent_dir = filepath.parent
+    filename_parts = filepath.name.split('.')
 
     with open(filepath, 'rb') as f:
         encrypted_content = f.read()
@@ -83,17 +90,23 @@ def decrypt_file(filepath: str, password: str):
     except AttributeError:
         raise DecryptionError
 
-    output = f"{path}/{filename}.{ext}" if robo_type != 'robodir' else f"{path}/{filename}.{ext}.zip"
+    if filename_parts[-1] == 'robodir':
+        # This was a robodir
+        output = f"{parent_dir}/{filename_parts[0]}.zip"
+    else:
+        output = f"{parent_dir}/{filename_parts[0]}.{filename_parts[1]}"
 
     with open(output, 'wb') as dcrp_f:
         dcrp_f.write(decrypted_content)
 
-    if robo_type == 'robodir':
+    if filename_parts[-1] == 'robodir':
         # Unzip the zip
-        shutil.unpack_archive(output, path)
+        new_dir = f"{parent_dir}/{filename_parts[0]}"
+        os.mkdir(new_dir)
+        shutil.unpack_archive(output, new_dir)
+        os.remove(output)  # This is the temporary zip file
 
     os.remove(filepath)
-    os.remove(output)
 
 
 def read_encrypted_file(filepath: str, password: str) -> bytes:
@@ -136,10 +149,6 @@ if __name__ == '__main__':
         file_path = file_obj.absolute().as_posix()
         pw = getpass.getpass(f"Enter password to {cryption}crypt: ")
         if cryption == 'en':  # 'en'cryption baby!
-            # We gotta know if this file is a file or a directory
-            if file_obj.is_dir():
-                shutil.make_archive(f"{file_path}.robodir", 'zip', file_path)
-                os.rmdir(file_path)
             encrypt_file(file_path, password=pw)
         elif cryption == 'de':  # 'de'cryption baby!
             try:
