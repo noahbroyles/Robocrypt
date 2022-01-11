@@ -174,7 +174,7 @@ if __name__ == '__main__':
 /_/ |_|\____/_.___/\____/     /_/
 """
     )
-    subparsers = parser.add_subparsers(dest='action')
+    subparsers = parser.add_subparsers(dest='action', required=True)
     salt_parser = subparsers.add_parser('generate-salt', aliases=['gs'], help='generate and save a new random salt of a given length')
     salt_parser.add_argument('x', type=int, help='number of bytes in the salt')
     # salt_parser.set_defaults(func=map_subparser_to_func(generate_salt, salt_parser))
