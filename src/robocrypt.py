@@ -150,6 +150,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('action', help='encrypt or decrypt', choices=['encrypt', 'decrypt'])
     parser.add_argument('file', help='The file or directory to encrypt/decrypt')
+    parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}')
     args = parser.parse_args()
 
     cryption = args.action.lower()[0:2]
