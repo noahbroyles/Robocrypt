@@ -140,12 +140,6 @@ def read_encrypted_file(filepath: str, password: str) -> bytes:
     return decrypted_content
 
 
-def map_subparser_to_func(func, subparser):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        return func(subparser, *args, **kwargs)
-    return wrapper
-
 
 def generate_salt(length: int):
     if platform.platform() == 'Windows':
