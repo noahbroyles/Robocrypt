@@ -5,8 +5,10 @@ import sys
 import base64
 import shutil
 import getpass
+import platform
 
 from pathlib import Path
+from functools import wraps
 from cryptography.hazmat.primitives import hashes
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
@@ -16,15 +18,21 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 __version__ = '4.2Pro'
 
 
+SPECIAL_SALT = False
+
+
 def get_salt(salt_file: str = None):
     # Support for Linux and Windows
-    if not salt_file:
+    if not salt_file and not SPECIAL_SALT:
         if os.path.exists('/var/secure/robocrypt.salt'):
             salt_file = '/var/secure/robocrypt.salt'
         elif os.path.exists('C:/secure/robocrypt.salt'):
             salt_file = 'C:/secure/robocrypt.salt'
         else:
             salt = b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
+
+    if SPECIAL_SALT:
+        salt_file = SPECIAL_SALT
 
     with open(salt_file, 'rb') as sf:
         salt = sf.read()
@@ -132,6 +140,30 @@ def read_encrypted_file(filepath: str, password: str) -> bytes:
     return decrypted_content
 
 
+def map_subparser_to_func(func, subparser):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(subparser, *args, **kwargs)
+    return wrapper
+
+
+def generate_salt(length: int):
+    if platform.platform() == 'Windows':
+        salt_file = 'C:/secure/robocrypt.salt'
+    else:
+        salt_file = '/var/secure/robocrypt.salt'
+
+    path = '/'.join(salt_file.split('/')[:-1])
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    with open(salt_file, 'wb') as sf:
+        sf.write(os.urandom(length))
+    
+    return salt_file
+
+    
+
 if __name__ == '__main__':
     # Let's goooooooooo! (https://genius.com/Chris-brown-look-at-me-now-lyrics xpath-> /html/body/div[1]/main/div[2]/div[2]/div[2]/div/div[4]/text()[5])
     import argparse
@@ -148,22 +180,50 @@ if __name__ == '__main__':
 /_/ |_|\____/_.___/\____/     /_/
 """
     )
-    parser.add_argument('action', help='encrypt or decrypt', choices=['encrypt', 'decrypt'])
-    parser.add_argument('file', help='The file or directory to encrypt/decrypt')
+    subparsers = parser.add_subparsers(dest='action')
+    salt_parser = subparsers.add_parser('generate-salt', aliases=['gs'], help='generate and save a new random salt of a given length')
+    salt_parser.add_argument('x', type=int, help='number of bytes in the salt')
+    # salt_parser.set_defaults(func=map_subparser_to_func(generate_salt, salt_parser))
+    
+    encryption_parser = subparsers.add_parser('encrypt', aliases=['en'], help='encrypt a file or directory')
+    encryption_parser.add_argument('file', help='the file or directory to encrypt')
+    encryption_parser.add_argument('-s', '--salt-file', dest='salt', help='specify a salt file to use', default=False)
+
+    decryption_parser = subparsers.add_parser('decrypt', aliases=['de'], help='decrypt a file or directory')
+    decryption_parser.add_argument('file', help='the file or directory to decrypt')
+    decryption_parser.add_argument('-s', '--salt-file', dest='salt', help='specify a salt file to use', default=False)
+
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}')
     args = parser.parse_args()
 
-    cryption = args.action.lower()[0:2]
-    file_obj = Path(args.file)
-    if not file_obj.exists():
-        sys.exit(f"{args.file}: no such file or directory")
+    action = args.action.lower()[0:2]
+
+    # Start parsing commands
+    if action in ['ge', 'gs']:
+        like_for_real = input('Overwriting your old salt will render anything encrypted with it absolutely un-readable, unless you back it up.\nAre you sure you want to do this? ').lower()[0] == 'y'
+        if like_for_real:
+            salt_location = generate_salt(args.x)
+            print(f"Successfully saved a salt of length {args.x} to {salt_location}")
+        else:
+            print('Your salt file was not altered.')
+            sys.exit()
     else:
+        # We're encrypting or decrypting something
+        file_obj = Path(args.file)
+        if not file_obj.exists():
+            sys.exit(f"{args.file}: no such file or directory")
         file_path = file_obj.absolute().as_posix()
-        pw = getpass.getpass(f"Enter password to {cryption}crypt: ")
-        if cryption == 'en':  # 'en'cryption baby!
+
+        # Set the salt if there was a custom one
+        SPECIAL_SALT = args.salt
+
+        pw = getpass.getpass(f"Enter password to {action}crypt: ")
+        if action == 'en':  # 'en'cryption baby!
             encrypt_file(file_path, password=pw)
-        elif cryption == 'de':  # 'de'cryption baby!
+            print(f"Successfully encrypted {file_path}!")
+        elif action == 'de':  # 'de'cryption baby!
             try:
                 decrypt_file(file_path, password=pw)
+                print(f"Successfully decrypted {file_path}!")
             except DecryptionError:
-                sys.exit('Invalid password.')
+                sys.exit('Invalid password or salt.')
