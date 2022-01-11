@@ -8,7 +8,6 @@ import getpass
 import platform
 
 from pathlib import Path
-from functools import wraps
 from cryptography.hazmat.primitives import hashes
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
