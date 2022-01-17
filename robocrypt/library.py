@@ -13,6 +13,20 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
+__all__ = [
+    'generate_salt',
+    'get_salt_file',
+    'get_salt',
+    'get_kdf',
+    'DecryptionError',
+    'encrypt',
+    'decrypt',
+    'encrypt_file',
+    'decrypt_file',
+    'read_encrypted_file'
+]
+
+
 def get_salt_file():
     if platform.system() == 'Windows':
         sf = 'C:/secure/robocrypt.salt'
