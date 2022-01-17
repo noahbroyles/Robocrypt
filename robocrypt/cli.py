@@ -26,7 +26,7 @@ def command_line():
     )
     subparsers = parser.add_subparsers(dest='action', required=True)
     salt_parser = subparsers.add_parser('generate-salt', aliases=['gs'], help='generate and save a new random salt of a given length')
-    salt_parser.add_argument('x', type=int, help='number of bytes in the salt')
+    salt_parser.add_argument('length', type=int, help='number of bytes in the salt')
 
     encryption_parser = subparsers.add_parser('encrypt', aliases=['en'], help='encrypt a file or directory')
     encryption_parser.add_argument('file', help='the file or directory to encrypt')
@@ -51,8 +51,8 @@ def command_line():
         else:
             like_for_real = True
         if like_for_real:
-            salt_location = generate_salt(args.x)
-            print(f"Successfully saved a salt of length {args.x} to {salt_location}")
+            salt_location = generate_salt(args.length)
+            print(f"Successfully saved a salt of length {args.length} to {salt_location}")
         else:
             print('Your salt file was not altered.')
             sys.exit()
