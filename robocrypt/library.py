@@ -36,16 +36,16 @@ def get_salt_file():
     return sf
 
 
-SALT_FILE = get_salt_file()
+os.environ["robo-SALT_FILE"] = get_salt_file()
 
 
 def get_salt(salt_file: str = None):
     # Support for Linux and Windows
-    if not salt_file and not SALT_FILE:
+    if not salt_file and not os.environ.get("robo-SALT_FILE", False):
         return b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
 
     if not salt_file:
-        salt_file = SALT_FILE
+        salt_file = os.environ["robo-SALT_FILE"]
 
     with open(salt_file, 'rb') as sf:
         salt = sf.read()
@@ -155,13 +155,13 @@ def read_encrypted_file(filepath: str, password: str) -> bytes:
 
 def generate_salt(length: int):
     try:
-        path = '/'.join(SALT_FILE.split('/')[:-1])
+        path = '/'.join(os.environ["robo-SALT_FILE"].split('/')[:-1])
         if not os.path.exists(path):
             os.mkdir(path)
 
-        with open(SALT_FILE, 'wb') as sf:
+        with open(os.environ["robo-SALT_FILE"], 'wb') as sf:
             sf.write(os.urandom(length))
     except PermissionError:
         sys.exit('Permission Denied: You may need to run as sudo')
 
-    return SALT_FILE
+    return os.environ["robo-SALT_FILE"]

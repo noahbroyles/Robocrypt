@@ -42,7 +42,7 @@ def command_line():
 
     # Set the salt if there was a custom one
     if args.salt_file:
-        SALT_FILE = args.salt_file
+        os.environ["robo-SALT_FILE"] = args.salt_file
 
     # Start parsing commands
     if action in ['ge', 'gs']:
