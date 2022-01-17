@@ -34,15 +34,15 @@ def command_line():
     decryption_parser = subparsers.add_parser('decrypt', aliases=['de'], help='decrypt a file or directory')
     decryption_parser.add_argument('file', help='the file or directory to decrypt')
 
-    parser.add_argument('-s', '--salt-file', dest='salt', help='specify a salt file to use', default=False)
+    parser.add_argument('-s', '--salt-file', dest='salt_file', help='specify a salt file to use', default=False)
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {prog_version}')
     args = parser.parse_args()
 
     action = args.action.lower()[0:2]
 
     # Set the salt if there was a custom one
-    if args.salt:
-        SALT_FILE = args.salt
+    if args.salt_file:
+        SALT_FILE = args.salt_file
 
     # Start parsing commands
     if action in ['ge', 'gs']:

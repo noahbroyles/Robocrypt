@@ -11,7 +11,7 @@ README = (HERE / "README.md").read_text()
 
 
 setup(
-    name='Robocrypt',
+    name='robocrypt',
     version=version,
     packages=['robocrypt'],
     url='https://github.com/noahbroyles/Robocrypt',
