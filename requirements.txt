@@ -1,2 +1,1 @@
-pyperclip
-cryptography
+cryptography==2.8
