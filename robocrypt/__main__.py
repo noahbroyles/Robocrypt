@@ -4,7 +4,8 @@ import getpass
 import argparse
 
 from pathlib import Path
-from .robo_lib import get_salt_file, generate_salt, encrypt_file, decrypt_file, DecryptionError
+from .info import __version__ as prog_version
+from .library import get_salt_file, generate_salt, encrypt_file, decrypt_file, DecryptionError
 
 # Let's goooooooooo! (https://genius.com/Chris-brown-look-at-me-now-lyrics xpath-> /html/body/div[1]/main/div[2]/div[2]/div[2]/div/div[4]/text()[5])
 
@@ -18,7 +19,6 @@ parser = argparse.ArgumentParser(
   / /_/ / __ \/ __ \/ __ \   / // /_
  / _, _/ /_/ / /_/ / /_/ /  /__  __/
 /_/ |_|\____/_.___/\____/     /_/   
-                                    
 """
 )
 subparsers = parser.add_subparsers(dest='action', required=True)
@@ -32,7 +32,7 @@ decryption_parser = subparsers.add_parser('decrypt', aliases=['de'], help='decry
 decryption_parser.add_argument('file', help='the file or directory to decrypt')
 
 parser.add_argument('-s', '--salt-file', dest='salt', help='specify a salt file to use', default=False)
-parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}')
+parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {prog_version}')
 args = parser.parse_args()
 
 action = args.action.lower()[0:2]
