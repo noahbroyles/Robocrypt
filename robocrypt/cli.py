@@ -74,4 +74,4 @@ def command_line():
                 decrypt_file(file_path, password=pw)
                 print(f"Successfully decrypted {file_path}!")
             except DecryptionError:
-                sys.exit('Invalid password or salt.')
+                sys.exit('Invalid password or salt. Check your password and salt settings and try again.')

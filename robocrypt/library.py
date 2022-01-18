@@ -28,7 +28,9 @@ __all__ = [
 
 
 def get_salt_file() -> str:
-    """Returns the location of the salt file used for cryptography
+    """Returns the location of the salt file used for cryptography.
+
+    On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`.
 
     Returns:
         str: the path the to salt file
@@ -47,16 +49,17 @@ os.environ["ROBO_SALT_FILE"] = get_salt_file()
 def get_salt(salt_file: str = None) -> bytes:
     """Gets the salt bytes used to encrypt and decrypt things.
 
+    If a salt file is not specified, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will attempt to generate a new salt.
+
     Args:
-        salt_file (str): The file to read the salt from. If not specified, a default for your OS will be used.
+        salt_file (str): The file to read the salt from.
 
     Returns:
         str: the salt bytes
     """
     # Support for Linux and Windows
-    if not salt_file and not os.environ.get("ROBO_SALT_FILE", False):
-        print("ROBOCRYPT WARNING: No salt file found on system. Using a Justin Beiber song as the salt.")
-        return b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
+    if not salt_file and not Path(os.environ.get("ROBO_SALT_FILE", '/r/o/b/o/c/r/y/p/t')).exists():
+        generate_salt(4224)
 
     if not salt_file:
         salt_file = os.environ["ROBO_SALT_FILE"]
