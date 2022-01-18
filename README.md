@@ -322,7 +322,68 @@ optional arguments:
   -v, --version         show program's version number and exit
 ```
 The commands you can use are these:  
-- `robocrypt [--salt-file </path/to/salt>] encrypt <file or dir>`: encrypt a file or directory
+- `generate-salt` or shortcut `gs`
+- `encrypt` or shortcut `en`
+- `decrypt` or shortcut `de`
+
+To specify a salt file to generate, encrypt, or decrypt, use the argument `--salt-file /path/to/saltfile`.  
+## `generate-salt`:
+**generate a salt in the default location**
+```console
+$ sudo robocrypt generate-salt 5829
+Overwriting your old salt will render anything encrypted with it absolutely un-readable, unless you back it up.
+Are you sure you want to do this? yes
+Successfully saved a salt of length 5829 to /var/secure/robocrypt.salt
+```
+Robocrypt will ask you if you really want to overwrite any existing salt files. Answering `no` at the prompt will exit the program without touching the salt.
+
+**generate a salt to a specific file**
+```console
+$ sudo robocrypt --salt-file /var/secure/myother.salt generate-salt 5829
+Successfully saved a salt of length 5829 to /var/secure/myother.salt
+```
+Here we were not prompted to confirm because there was no previous file at `/var/secure/myother.salt`.
+
+## `encrypt`:  
+**Encrypt a file**:
+```
+$ robocrypt encrypt tests/data/Dictionary.java 
+Enter password to encrypt: 🔑
+Successfully encrypted /path/tests/data/Dictionary.java!
+$ ls tests/data/
+Dictionary.java.robo  src
+```
+You can see that `Dictionary.java` was encrypted and saved as `Dictionary.java.robo`.  
+**Encrypt a folder with a specified salt**
+```console
+$ robocrypt --salt-file /var/secure/alternate.salt encrypt tests/data/src/
+Enter password to encrypt: 🔑
+Successfully encrypted /path/tests/data/src!
+$ ls tests/data/
+Dictionary.java.robo  src.robodir
+```
+The `src` directory was encrypted and saved as `src.robodir` using the `alternate.salt`.  
+
+## `decrypt`:
+**Decrypt a file**:
+```console
+$ robocrypt decrypt tests/data/Dictionary.java.robo 
+Enter password to decrypt: 🔑
+Successfully decrypted /path/tests/data/Dictionary.java.robo!
+$ ls tests/data/
+Dictionary.java  src.robodir
+```
+`Dictionary.java` was restored to its original state with only the `.java` extension.  
+**Decrypt a folder with a specified salt**
+```console
+$ robocrypt --salt-file /var/secure/alternate.salt decrypt tests/data/src.robodir
+Enter password to decrypt: 🔑
+Successfully decrypted /path/tests/data/src.robodir!
+$ ls tests/data/
+Dictionary.java  src
+```
+Now the `src` directory is back to normal, with no `.robodir` extension.
+
 ## Warning!
 When using the tool, don't jack around with the output files' extensions (`.robo` and `.robodir`). Robocrypt uses these extensions to tell what type of file is encrypted and if change them, you will regret it. Also, I would recommend not double-encrypting anything. Because of the way the program works with extensions, you'll end up screwing yourself. Encrypt your shit ***one*** time with a strong password.
 <br>
