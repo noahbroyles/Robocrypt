@@ -1,7 +1,7 @@
 import pathlib
 
 from setuptools import setup
-from robocrypt import __version__ as version
+from robocrypt.info import version, email
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -17,7 +17,7 @@ setup(
     url='https://github.com/noahbroyles/Robocrypt',
     license='MIT',
     author='Noah Broyles',
-    author_email='noah@x3nzpouwu.com',
+    author_email=email,
     description='Simple encryption library that handles the background details for you.',
     long_description=README,
     long_description_content_type='text/markdown',
