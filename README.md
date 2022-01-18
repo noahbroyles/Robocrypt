@@ -5,12 +5,18 @@ Due to the encryption algorithm in use here, large files should not be encrypted
 
 Robocrypt is amazing for encrypting small files and folders with sensitive data. I guarantee that ain't nobody gonna break the encryption, unless you use a sub-par password.
 
-## Installation:
+# Documentation Index:
+- [Installation](#installation)
+- [Setup](#setup)
+- [Module Documentation](#module)
+- [Command Line Docs](#command-line)
+
+## <a id="installation"></a>Installation:
 ```console
 pip3 install robocrypt
 ```
 
-## Setup:
+## <a id="setup"></a>Setup:
 You only have to do this if you want to control the permissions and length of your salt. If you do not care about this stuff, skip this step and robocrypt will do it for you.  
 Create a `secure` directory in `/var` that only your user can read/write too:
 ```console
@@ -23,10 +29,6 @@ $ robocrypt generate-salt 69173
 ```  
 Make sure that you decrypt anything you've encrypted with your current salt(or back it up) before you change it! Otherwise you will never be able to recover files that you encrypted. 
 If you intend to share encrypted files with someone, you also need to share your salt with them, or they will have serious trouble trying to decrypt the files.
-
-# Documentation Index:
-- [Module Documentation](#module)
-- [Command Line Docs](#command-line)
 
 # <a id="module"></a>Module `robocrypt`
 ## Sub-modules
