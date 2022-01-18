@@ -11,11 +11,12 @@ pip3 install robocrypt
 ```
 
 ## Setup:
+You only have to do this if you want to control the permissions and length of your salt. If you do not care about this stuff, skip this step and robocrypt will do it for you.  
 Create a `secure` directory in `/var` that only your user can read/write too:
 ```console
 $ sudo mkdir /var/secure
 $ sudo chmod 740 /var/secure
-```  
+```
 Generate a salt to use when encrypting stuff:
 ```console
 $ robocrypt generate-salt 69173
@@ -162,7 +163,7 @@ Encrypts a bytes message using the specified bytes password.
 >     )
 
 
-Encrypts a file and saves it with a `.robo` for file or `.robodir` extension for directories.
+Encrypts a file and saves it with a `.robo` for file or `.robodir` extension for directories. I strongly advise that you not mess with the extensions if you want to be able to properly decrypt your files.
 
 
 **Args**  
@@ -199,12 +200,8 @@ Generates a salt and stores it in the file indicated by the ENV var `ROBO_SALT_F
 <code>str</code>
 :   the location of the new salt file
 
-
-
     
 ### Function `get_kdf`
-
-
 
 
 >     def get_kdf()
@@ -232,7 +229,7 @@ Gets a KDF object to perform cryptography with.
 
 Gets the salt bytes used to encrypt and decrypt things.  
 If a salt file is not specified, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will attempt to generate a new salt.  
-The salt file location is stored in the environment variable `ROBO_SALT_FILE`.
+The salt file location is stored in the environment variable `ROBO_SALT_FILE`. You can modify this environment variable to point to different salt files if desired.
 
 
 **Args**  
