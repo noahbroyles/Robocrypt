@@ -26,7 +26,7 @@ setup(
         "Programming Language :: Python :: 3"
     ],
     entry_points={
-        "console_scripts": ["robocrypt=robocrypt.cli:command_line"]
+        "console_scripts": ["robocrypt=robocrypt.cli:robocrypt_main"]
     },
     install_requires=['cryptography==3.2']
 )

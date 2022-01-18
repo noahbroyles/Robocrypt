@@ -75,3 +75,10 @@ def command_line():
                 print(f"Successfully decrypted {file_path}!")
             except DecryptionError:
                 sys.exit('Invalid password or salt. Check your password and salt settings and try again.')
+
+
+def robocrypt_main():
+    try:
+        command_line()
+    except KeyboardInterrupt:
+        sys.exit()

@@ -1,3 +1,3 @@
-from .cli import command_line
+from .cli import robocrypt_main
 
-command_line()
+robocrypt_main()
