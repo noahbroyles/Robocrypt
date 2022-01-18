@@ -16,14 +16,13 @@ Robocrypt is amazing for encrypting small files and folders with sensitive data.
 pip3 install robocrypt
 ```
 
-## <a id="setup"></a>Setup:
-You only have to do this if you want to control the permissions and length of your salt. If you do not care about this stuff, skip this step and robocrypt will do it for you.  
-<br>  
+## <a id="setup"></a>Setup: 
 Create a `secure` directory in `/var` that only your user can read/write too:
 ```console
 $ sudo mkdir /var/secure
 $ sudo chmod 740 /var/secure
 ```
+If you're using Windows, do the same thing but in `C:\secure`.  
 Generate a salt to use when encrypting stuff:
 ```console
 $ robocrypt generate-salt 69173
