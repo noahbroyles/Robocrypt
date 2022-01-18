@@ -4,7 +4,7 @@ import getpass
 import argparse
 
 from pathlib import Path
-from .info import __version__ as prog_version
+from .info import version as prog_version
 from .library import get_salt_file, generate_salt, encrypt_file, decrypt_file, DecryptionError
 
 
