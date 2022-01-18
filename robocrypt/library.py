@@ -27,19 +27,36 @@ __all__ = [
 ]
 
 
+class DecryptionError(Exception):
+    """This occurs when an invalid password is used to try to decrypt something, or the wrong salt is used.
+    """
+    def __init__(self):
+        super(DecryptionError, self).__init__()
+
+
+class SaltNotFoundError(FileNotFoundError):
+    """This occurs when you attempt to use a salt location that does not exist.
+    """
+    def __init__(self, salt_location):
+        super(FileNotFoundError, self).__init__(f'No salt found at {salt_location}. Try specifying a different salt or generating a new one.')
+
+
 def get_salt_file() -> str:
     """Returns the location of the salt file used for cryptography.
 
-    On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`.
+    On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`. If a custom salt is specified in the environment variable `ROBO_SALT_FILE`, it will be used instead of the OS default.
 
     Returns:
         str: the path the to salt file
     """
+    if os.environ.get("ROBO_SALT_FILE", False):
+        return os.environ['ROBO_SALT_FILE']
+
     if platform.system() == 'Windows':
         sf = 'C:/secure/robocrypt.salt'
-    else:
+    else:   # It could be Darwin >3 or Linux :)
         sf = '/var/secure/robocrypt.salt'
-
+    
     return sf
 
 
@@ -49,20 +66,20 @@ os.environ["ROBO_SALT_FILE"] = get_salt_file()
 def get_salt(salt_file: str = None) -> bytes:
     """Gets the salt bytes used to encrypt and decrypt things.
 
-    If a salt file is not specified, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will attempt to generate a new salt.
+    If a salt file is not specified and the env var `ROBO_SALT_FILE` is not set, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will raise an error.
 
     Args:
-        salt_file (str): The file to read the salt from.
+        salt_file (str): a custom file to read the salt from.
 
     Returns:
         str: the salt bytes
     """
     # Support for Linux and Windows
-    if not salt_file and not Path(os.environ.get("ROBO_SALT_FILE", '/r/o/b/o/c/r/y/p/t')).exists():
-        generate_salt(4224)
-
     if not salt_file:
-        salt_file = os.environ["ROBO_SALT_FILE"]
+        salt_file = os.environ.get("ROBO_SALT_FILE", get_salt_file())
+
+    if not Path(salt_file).exists():
+        raise SaltNotFoundError(salt_file)
 
     with open(salt_file, 'rb') as sf:
         salt = sf.read()
@@ -99,13 +116,6 @@ def encrypt(message: bytes, password: bytes) -> bytes:
     encrypted_bytes = f.encrypt(message)
 
     return base64.urlsafe_b64decode(encrypted_bytes)
-
-
-class DecryptionError(Exception):
-    """This occurs when an invalid password is used to try to decrypt something, or the wrong salt is used.
-    """
-    def __init__(self):
-        super(DecryptionError, self).__init__()
 
 
 def decrypt(message: bytes, password: bytes) -> bytes:
@@ -230,15 +240,16 @@ def generate_salt(length: int):
     Returns:
         str: the location of the new salt file
     """
+    salt_file = get_salt_file()
     try:
-        path = '/'.join(os.environ["ROBO_SALT_FILE"].split('/')[:-1])
+        path = '/'.join(salt_file.split('/')[:-1])
         if not os.path.exists(path):
             os.mkdir(path)
 
-        with open(os.environ["ROBO_SALT_FILE"], 'wb') as sf:
+        with open(salt_file, 'wb') as sf:
             sf.write(os.urandom(length))
     except PermissionError:
-        who_let_the_salt_out = 'sudo' if platform.system() == 'Linux' else 'administrator'
+        who_let_the_salt_out = 'administrator' if platform.system() == 'Windows' else 'sudo'
         sys.exit(f'Permission Denied: You may need to run as {who_let_the_salt_out}')
 
-    return os.environ["ROBO_SALT_FILE"]
+    return salt_file

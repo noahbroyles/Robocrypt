@@ -1,7 +1,7 @@
 # Robocrypt
 ## Super strong python3 encryption program with file and folder support
 
-Due to the encryption algorithm in use here, large files should not be encrypted with this tool. Robocrypt keeps data in memory while encrypting/decrypting, so depending on the RAM in your system there will be a limit on the size of files you can encrypt with this tool.
+Due to the encryption algorithm in use here, large files should not be encrypted with this tool. Robocrypt keeps data in memory while encrypting/decrypting, so depending on the RAM in your system there will be a limit on the size of files you can handle with this tool.
 
 Robocrypt is amazing for encrypting small files and folders with sensitive data. I guarantee that ain't nobody gonna break the encryption, unless you use a sub-par password.
 
@@ -18,6 +18,7 @@ pip3 install robocrypt
 
 ## <a id="setup"></a>Setup:
 You only have to do this if you want to control the permissions and length of your salt. If you do not care about this stuff, skip this step and robocrypt will do it for you.  
+<br>  
 Create a `secure` directory in `/var` that only your user can read/write too:
 ```console
 $ sudo mkdir /var/secure
@@ -230,13 +231,13 @@ Gets a KDF object to perform cryptography with.
 
 
 Gets the salt bytes used to encrypt and decrypt things.  
-If a salt file is not specified, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will attempt to generate a new salt.  
+If a salt file is not specified and the env var `ROBO_SALT_FILE` is not set, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will raise an error.  
 The salt file location is stored in the environment variable `ROBO_SALT_FILE`. You can modify this environment variable to point to different salt files if desired.
 
 
 **Args**  
 **```salt_file```** :&ensp;<code>str</code>
-:   The file to read the salt from
+:   a custom file to read the salt from.
 
 
 
@@ -253,7 +254,7 @@ The salt file location is stored in the environment variable `ROBO_SALT_FILE`. Y
 
 
 Returns the location of the salt file used for cryptography.  
-On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`.
+On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`. If a custom salt is specified in the environment variable `ROBO_SALT_FILE`, it will be used instead of the OS default.
 
 
 **Returns**  
@@ -320,5 +321,8 @@ optional arguments:
                         specify a salt file to use
   -v, --version         show program's version number and exit
 ```
+The commands you can use are these:  
+- `robocrypt [--salt-file </path/to/salt>] encrypt <file or dir>`: encrypt a file or directory
+## Warning!
 When using the tool, don't jack around with the output files' extensions (`.robo` and `.robodir`). Robocrypt uses these extensions to tell what type of file is encrypted and if change them, you will regret it. Also, I would recommend not double-encrypting anything. Because of the way the program works with extensions, you'll end up screwing yourself. Encrypt your shit ***one*** time with a strong password.
 <br>
