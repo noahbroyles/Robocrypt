@@ -165,7 +165,9 @@ def decrypt_file(filepath: str, password: str):
     """
     filepath = Path(filepath)
     parent_dir = filepath.parent
-    filename_parts = filepath.name.split('.')
+    fn = filepath.name
+    directory = True if fn.endswith('.robodir') else False
+    original_filename = fn[:-5] if fn.endswith('.robo') else fn[:-8]
 
     with open(filepath, 'rb') as f:
         encrypted_content = f.read()
@@ -175,18 +177,18 @@ def decrypt_file(filepath: str, password: str):
     except AttributeError:
         raise DecryptionError
 
-    if filename_parts[-1] == 'robodir':
+    if directory:
         # This was a robodir
-        output = f"{parent_dir}/{filename_parts[0]}.zip"
+        output = f"{parent_dir}/{original_filename}.zip"
     else:
-        output = f"{parent_dir}/{filename_parts[0]}.{filename_parts[1]}"
+        output = f"{parent_dir}/{original_filename}"
 
     with open(output, 'wb') as dcrp_f:
         dcrp_f.write(decrypted_content)
 
-    if filename_parts[-1] == 'robodir':
+    if directory:
         # Unzip the zip
-        new_dir = f"{parent_dir}/{filename_parts[0]}"
+        new_dir = f"{parent_dir}/{original_filename}"
         os.mkdir(new_dir)
         shutil.unpack_archive(output, new_dir)
         os.remove(output)  # This is the temporary zip file
