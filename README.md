@@ -354,6 +354,7 @@ $ ls tests/data/
 Dictionary.java.robo  src
 ```
 You can see that `Dictionary.java` was encrypted and saved as `Dictionary.java.robo`.  
+
 **Encrypt a folder with a specified salt**
 ```console
 $ robocrypt --salt-file /var/secure/alternate.salt encrypt tests/data/src/
@@ -374,6 +375,7 @@ $ ls tests/data/
 Dictionary.java  src.robodir
 ```
 `Dictionary.java` was restored to its original state with only the `.java` extension.  
+
 **Decrypt a folder with a specified salt**
 ```console
 $ robocrypt --salt-file /var/secure/alternate.salt decrypt tests/data/src.robodir
