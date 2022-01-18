@@ -9,7 +9,9 @@ from .library import get_salt_file, generate_salt, encrypt_file, decrypt_file, D
 
 
 def command_line():
-
+    """
+    This is the command line entry point of robocrypt.
+    """
     # Let's goooooooooo! (https://genius.com/Chris-brown-look-at-me-now-lyrics xpath-> /html/body/div[1]/main/div[2]/div[2]/div[2]/div/div[4]/text()[5])
 
     parser = argparse.ArgumentParser(
@@ -42,7 +44,7 @@ def command_line():
 
     # Set the salt if there was a custom one
     if args.salt_file:
-        os.environ["robo-SALT_FILE"] = args.salt_file
+        os.environ["ROBO_SALT_FILE"] = args.salt_file
 
     # Start parsing commands
     if action in ['ge', 'gs']:

@@ -41,7 +41,7 @@ def get_salt_file() -> str:
     return sf
 
 
-os.environ["robo-SALT_FILE"] = get_salt_file()
+os.environ["ROBO_SALT_FILE"] = get_salt_file()
 
 
 def get_salt(salt_file: str = None) -> bytes:
@@ -54,12 +54,12 @@ def get_salt(salt_file: str = None) -> bytes:
         str: the salt bytes
     """
     # Support for Linux and Windows
-    if not salt_file and not os.environ.get("robo-SALT_FILE", False):
+    if not salt_file and not os.environ.get("ROBO_SALT_FILE", False):
         print("ROBOCRYPT WARNING: No salt file found on system. Using a Justin Beiber song as the salt.")
         return b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
 
     if not salt_file:
-        salt_file = os.environ["robo-SALT_FILE"]
+        salt_file = os.environ["ROBO_SALT_FILE"]
 
     with open(salt_file, 'rb') as sf:
         salt = sf.read()
@@ -226,13 +226,13 @@ def generate_salt(length: int):
         str: the location of the new salt file
     """
     try:
-        path = '/'.join(os.environ["robo-SALT_FILE"].split('/')[:-1])
+        path = '/'.join(os.environ["ROBO_SALT_FILE"].split('/')[:-1])
         if not os.path.exists(path):
             os.mkdir(path)
 
-        with open(os.environ["robo-SALT_FILE"], 'wb') as sf:
+        with open(os.environ["ROBO_SALT_FILE"], 'wb') as sf:
             sf.write(os.urandom(length))
     except PermissionError:
         sys.exit('Permission Denied: You may need to run as sudo')
 
-    return os.environ["robo-SALT_FILE"]
+    return os.environ["ROBO_SALT_FILE"]
