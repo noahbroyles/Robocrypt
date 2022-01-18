@@ -3,7 +3,7 @@
 
 Due to the encryption algorithm in use here, large files should not be encrypted with this tool. Robocrypt keeps data in memory while encrypting/decrypting, so depending on the RAM in your system there will be a limit on the size of files you can handle with this tool.
 
-Robocrypt is amazing for encrypting small files and folders with sensitive data. I guarantee that ain't nobody gonna break the encryption, unless you use a sub-par password.
+Robocrypt is amazing for encrypting small files and folders with sensitive data. It uses symmetric key encryption, plus a salt of random bytes. I guarantee that ain't nobody gonna break the encryption, unless you use a sub-par password.
 
 # Documentation Index:
 - [Installation](#installation)
