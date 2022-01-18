@@ -328,7 +328,7 @@ The commands you can use are these:
 
 To specify a salt file to generate, encrypt, or decrypt, use the argument `--salt-file /path/to/saltfile`.  
 ## `generate-salt`:
-**generate a salt in the default location**
+**Generate a salt in the default location**:
 ```console
 $ sudo robocrypt generate-salt 5829
 Overwriting your old salt will render anything encrypted with it absolutely un-readable, unless you back it up.
@@ -337,7 +337,7 @@ Successfully saved a salt of length 5829 to /var/secure/robocrypt.salt
 ```
 Robocrypt will ask you if you really want to overwrite any existing salt files. Answering `no` at the prompt will exit the program without touching the salt.
 
-**generate a salt to a specific file**
+**Generate a salt to a specific file**:
 ```console
 $ sudo robocrypt --salt-file /var/secure/myother.salt generate-salt 5829
 Successfully saved a salt of length 5829 to /var/secure/myother.salt
@@ -355,7 +355,7 @@ Dictionary.java.robo  src
 ```
 You can see that `Dictionary.java` was encrypted and saved as `Dictionary.java.robo`.  
 
-**Encrypt a folder with a specified salt**
+**Encrypt a folder with a specified salt**:
 ```console
 $ robocrypt --salt-file /var/secure/alternate.salt encrypt tests/data/src/
 Enter password to encrypt: 🔑
@@ -376,7 +376,7 @@ Dictionary.java  src.robodir
 ```
 `Dictionary.java` was restored to its original state with only the `.java` extension.  
 
-**Decrypt a folder with a specified salt**
+**Decrypt a folder with a specified salt**:
 ```console
 $ robocrypt --salt-file /var/secure/alternate.salt decrypt tests/data/src.robodir
 Enter password to decrypt: 🔑
