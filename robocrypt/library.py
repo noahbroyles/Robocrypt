@@ -14,11 +14,12 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
 __all__ = [
+    'DecryptionError',
+    'SaltNotFoundError',
     'generate_salt',
     'get_salt_file',
     'get_salt',
     'get_kdf',
-    'DecryptionError',
     'encrypt',
     'decrypt',
     'encrypt_file',
