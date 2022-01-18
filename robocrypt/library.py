@@ -222,7 +222,7 @@ def read_encrypted_file(filepath: str, password: str) -> bytes:
 
 
 def generate_salt(length: int):
-    """Generates a salt and stores it in the file indicated by the ENV var 'robo-SALT_FILE'
+    """Generates a salt and stores it in the file indicated by the ENV var 'ROBO_SALT_FILE'
 
     Args:
         length (int): the number of bytes to contain in the salt
@@ -238,6 +238,7 @@ def generate_salt(length: int):
         with open(os.environ["ROBO_SALT_FILE"], 'wb') as sf:
             sf.write(os.urandom(length))
     except PermissionError:
-        sys.exit('Permission Denied: You may need to run as sudo')
+        who_let_the_salt_out = 'sudo' if platform.system() == 'Linux' else 'administrator'
+        sys.exit(f'Permission Denied: You may need to run as {who_let_the_salt_out}')
 
     return os.environ["ROBO_SALT_FILE"]
