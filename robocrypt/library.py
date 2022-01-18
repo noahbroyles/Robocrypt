@@ -28,9 +28,10 @@ __all__ = [
 
 
 def get_salt_file() -> str:
-    """
-    Returns the location of the salt file used for cryptography
-    :return: The path to the salt file
+    """Returns the location of the salt file used for cryptography
+
+    Returns:
+        str: the path the to salt file
     """
     if platform.system() == 'Windows':
         sf = 'C:/secure/robocrypt.salt'
@@ -44,13 +45,17 @@ os.environ["robo-SALT_FILE"] = get_salt_file()
 
 
 def get_salt(salt_file: str = None) -> bytes:
-    """
-    Returns the salt bytes used to encrypt and decrypt things.
-    :param salt_file: The file to read the salt from. If not specified, a default for your OS will be used.
-    :return: the salt bytes
+    """Gets the salt bytes used to encrypt and decrypt things.
+
+    Args:
+        salt_file (str): The file to read the salt from. If not specified, a default for your OS will be used.
+
+    Returns:
+        str: the salt bytes
     """
     # Support for Linux and Windows
     if not salt_file and not os.environ.get("robo-SALT_FILE", False):
+        print("ROBOCRYPT WARNING: No salt file found on system. Using a Justin Beiber song as the salt.")
         return b"Youngblood thinks there's always tomorrow I miss your touch some nights when I'm hollow I know you crossed a bridge that I can't follow Since the love that you left is all that I get, I want you to knowThat if I can't be close to you, I'll settle for the ghost of you I miss you more than life (More than life) And if you can't be next to me, your memory is ecstasy I miss you more than life, I miss you more than life"
 
     if not salt_file:
@@ -63,9 +68,10 @@ def get_salt(salt_file: str = None) -> bytes:
 
 
 def get_kdf():
-    """
-    Returns a KDF object to perform cryptography with
-    :return: a PBKDF2HMAC
+    """Gets a KDF object to perform cryptography with.
+
+    Returns:
+        PBKDF2HMAC: the KDF to perform encryption/decryption with
     """
     return PBKDF2HMAC(
         algorithm=hashes.SHA512_256(),
@@ -77,11 +83,14 @@ def get_kdf():
 
 
 def encrypt(message: bytes, password: bytes) -> bytes:
-    """
-    Encrypts a bytes message using the specified bytes password
-    :param message: the message to encrypt
-    :param password: the password to encrypt the message with
-    :return: Encrypted bytes
+    """Encrypts a bytes message using the specified bytes password.
+
+    Args:
+        message (bytes): the message to encrypt
+        password (bytes): the password to encrypt the message with
+
+    Returns:
+        bytes: the encrypted bytes
     """
     f = Fernet(base64.urlsafe_b64encode(get_kdf().derive(password)))
     encrypted_bytes = f.encrypt(message)
@@ -90,19 +99,21 @@ def encrypt(message: bytes, password: bytes) -> bytes:
 
 
 class DecryptionError(Exception):
-    """
-    This occurs when an invalid password is used to try to decrypt something, or the wrong salt is used.
+    """This occurs when an invalid password is used to try to decrypt something, or the wrong salt is used.
     """
     def __init__(self):
         super(DecryptionError, self).__init__()
 
 
 def decrypt(message: bytes, password: bytes) -> bytes:
-    """
-    Decrypt a chunk of bytes with a bytes password.
-    :param message: The bytes to decrypt
-    :param password: The password to decrypt the message with
-    :return: the decrypted bytes
+    """Decrypt a chunk of bytes with a password.
+
+    Args:
+        message (bytes): The bytes to decrypt
+        password (bytes): The password to decrypt the message with
+
+    Returns:
+        bytes: the decrypted bytes
     """
     f = Fernet(base64.urlsafe_b64encode(get_kdf().derive(password)))
 
@@ -113,11 +124,12 @@ def decrypt(message: bytes, password: bytes) -> bytes:
 
 
 def encrypt_file(filepath: str, password: str):
-    """
-    Encrypts a file and saves it with a .robo for file or .robodir extension for directories.
-    :param filepath: The file or directory to encrypt
-    :param password: the password to encrypt the file with
-    :return: None
+    """Encrypts a file and saves it with a .robo for file or .robodir extension for directories.
+
+    Args:
+        filepath (str): The file or directory to encrypt
+        password (str): the password to encrypt the file with
+
     """
     filepath = Path(filepath)
     parent_dir = filepath.parent
@@ -144,11 +156,12 @@ def encrypt_file(filepath: str, password: str):
 
 
 def decrypt_file(filepath: str, password: str):
-    """
-    Decrypts a file and saves it without its robo extension.
-    :param filepath: The encrypted file to decrypt
-    :param password: The password to decrypt the file with
-    :return: None
+    """Decrypts a file and saves it without its robo extension.
+
+    Args:
+        filepath (str): The encrypted file to decrypt
+        password (str): The password to decrypt the file with
+
     """
     filepath = Path(filepath)
     parent_dir = filepath.parent
@@ -182,11 +195,15 @@ def decrypt_file(filepath: str, password: str):
 
 
 def read_encrypted_file(filepath: str, password: str) -> bytes:
-    """
-    Returns the decrypted content of an encrypted file without decrypting the file itself.
-    :param filepath: the encrypted file to read
-    :param password: the password(string) to use to read the file
-    :return: the file's decrypted content in bytes
+    """Returns the decrypted content of an encrypted file without decrypting the file itself.
+
+    Args:
+        filepath (str): the encrypted file to read
+        password (str): the password to use to read the file
+
+    Returns:
+        bytes: the file's decrypted content in bytes
+
     """
     with open(filepath, 'rb') as f:
         encrypted_content = f.read()
@@ -200,10 +217,13 @@ def read_encrypted_file(filepath: str, password: str) -> bytes:
 
 
 def generate_salt(length: int):
-    """
-    Generates a salt and stores it in the file indicated by the ENV var 'robo-SALT_FILE'
-    :param length: the number of bytes to contain in the salt
-    :return: the location of the new salt file
+    """Generates a salt and stores it in the file indicated by the ENV var 'robo-SALT_FILE'
+
+    Args:
+        length (int): the number of bytes to contain in the salt
+
+    Returns:
+        str: the location of the new salt file
     """
     try:
         path = '/'.join(os.environ["robo-SALT_FILE"].split('/')[:-1])
