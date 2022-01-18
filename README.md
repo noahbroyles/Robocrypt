@@ -59,10 +59,6 @@ This contains information about the module such as version and author.
 # <a id="robocrypt.library"></a>Module `robocrypt.library`
 This contains all the core functions used by `robocrypt`.
 
-
-
-
-
     
 ## Functions
 
@@ -82,7 +78,7 @@ This contains all the core functions used by `robocrypt`.
 Decrypt a chunk of bytes with a password.
 
 
-Args  
+**Args**  
 **```message```** :&ensp;<code>bytes</code>
 :   The bytes to decrypt
 
@@ -92,7 +88,7 @@ Args
 
 
 
-Returns  
+**Returns**  
 <code>bytes</code>
 :   the decrypted bytes
 
@@ -113,7 +109,7 @@ Returns
 Decrypts a file and saves it without its robo extension.
 
 
-Args  
+**Args**  
 **```filepath```** :&ensp;<code>str</code>
 :   The encrypted file to decrypt
 
@@ -138,7 +134,7 @@ Args
 Encrypts a bytes message using the specified bytes password.
 
 
-Args  
+**Args**  
 **```message```** :&ensp;<code>bytes</code>
 :   the message to encrypt
 
@@ -148,7 +144,7 @@ Args
 
 
 
-Returns  
+**Returns**  
 <code>bytes</code>
 :   the encrypted bytes
 
@@ -166,10 +162,10 @@ Returns
 >     )
 
 
-Encrypts a file and saves it with a .robo for file or .robodir extension for directories.
+Encrypts a file and saves it with a `.robo` for file or `.robodir` extension for directories.
 
 
-Args  
+**Args**  
 **```filepath```** :&ensp;<code>str</code>
 :   The file or directory to encrypt
 
@@ -190,16 +186,16 @@ Args
 >     )
 
 
-Generates a salt and stores it in the file indicated by the ENV var 'robo-SALT_FILE'
+Generates a salt and stores it in the file indicated by the ENV var `ROBO_SALT_FILE`.
 
 
-Args  
+**Args**  
 **```length```** :&ensp;<code>int</code>
 :   the number of bytes to contain in the salt
 
 
 
-Returns  
+**Returns**  
 <code>str</code>
 :   the location of the new salt file
 
@@ -217,7 +213,7 @@ Returns
 Gets a KDF object to perform cryptography with.
 
 
-Returns  
+**Returns**  
 <code>PBKDF2HMAC</code>
 :   the KDF to perform encryption/decryption with
 
@@ -234,16 +230,18 @@ Returns
 >     ) ‑> bytes
 
 
-Gets the salt bytes used to encrypt and decrypt things.
+Gets the salt bytes used to encrypt and decrypt things.  
+If a salt file is not specified, a default salt location for your OS will be used. If there is not a salt at that location, robocrypt will attempt to generate a new salt.  
+The salt file location is stored in the environment variable `ROBO_SALT_FILE`.
 
 
-Args  
+**Args**  
 **```salt_file```** :&ensp;<code>str</code>
-:   The file to read the salt from. If not specified, a default for your OS will be used.
+:   The file to read the salt from
 
 
 
-Returns  
+**Returns**  
 <code>str</code>
 :   the salt bytes
 
@@ -255,10 +253,11 @@ Returns
 >     def get_salt_file() ‑> str
 
 
-Returns the location of the salt file used for cryptography
+Returns the location of the salt file used for cryptography.  
+On Unix systems the salt file is at `/var/secure/robocrypt.salt`, and on Windows the salt is at `C:/secure/robocrypt.salt`.
 
 
-Returns  
+**Returns**  
 <code>str</code>
 :   the path the to salt file
 
@@ -274,7 +273,7 @@ Returns
 Returns the decrypted content of an encrypted file without decrypting the file itself.
 
 
-Args  
+**Args**  
 **```filepath```** :&ensp;<code>str</code>
 :   the encrypted file to read
 
@@ -282,7 +281,7 @@ Args
 **```password```** :&ensp;<code>str</code>
 :   the password to use to read the file
 
-Returns  
+**Returns**  
 <code>bytes</code>
 :   the file's decrypted content in bytes
 
