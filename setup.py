@@ -28,5 +28,5 @@ setup(
     entry_points={
         "console_scripts": ["robocrypt=robocrypt.cli:robocrypt_main"]
     },
-    install_requires=['cryptography==3.2']
+    install_requires=['cryptography>=3.3.2']
 )
