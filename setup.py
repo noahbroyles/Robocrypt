@@ -1,13 +1,18 @@
+import re
 import pathlib
 
 from setuptools import setup
-from robocrypt.info import version, email
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
 README = (HERE / "README.md").read_text()
+
+# Read version and email from info.py without importing
+info_content = (HERE / "robocrypt" / "info.py").read_text()
+version = re.search(r"version = ['\"]([^'\"]+)['\"]", info_content).group(1)
+email = re.search(r"email = ['\"]([^'\"]+)['\"]", info_content).group(1)
 
 
 setup(
